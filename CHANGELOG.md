@@ -1,3 +1,6 @@
+## 0.0.1+24
+* [Android] hide store card field
+* [IOS] hide store card field
 ## 0.0.1+23
 * [Android] Increase API readTimeout up to 60s
 ## 0.0.1+22
