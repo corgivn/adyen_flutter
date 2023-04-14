@@ -9,6 +9,7 @@ import com.adyen.checkout.components.model.payments.Amount
 import com.adyen.checkout.components.model.payments.request.PaymentComponentData
 import com.adyen.checkout.components.model.payments.request.PaymentMethodDetails
 import com.adyen.checkout.core.api.Environment
+import com.adyen.checkout.core.util.LocaleUtil
 import com.adyen.checkout.dropin.DropIn
 import com.adyen.checkout.dropin.DropInConfiguration
 import com.adyen.checkout.dropin.service.DropInService
@@ -92,7 +93,13 @@ class FlutterAdyenPlugin :
                 val lineItemString = JSONObject(lineItem).toString()
                 val additionalDataString = JSONObject(additionalData).toString()
                 val localeString = call.argument<String>("locale") ?: "de_DE"
-                val countryCode = localeString.split("_").last()
+                val localeParts = localeString.split("_")
+                val countryCode = localeParts.last()
+                var locale = Locale(countryCode)
+
+                if (localeParts.size > 1) {
+                    locale = Locale(localeParts[0], localeParts[1])
+                }
 
                 /*
                 Log.e("[Flutter Adyen]", "Client Key from Flutter: $clientKey")
@@ -117,9 +124,10 @@ class FlutterAdyenPlugin :
                 try {
                     val jsonObject = JSONObject(paymentMethods ?: "")
                     val paymentMethodsApiResponse = PaymentMethodsApiResponse.SERIALIZER.deserialize(jsonObject)
-                    val shopperLocale = Locale.GERMANY
-                    // val shopperLocale = if (LocaleUtil.isValidLocale(locale)) locale else LocaleUtil.getLocale(nonNullActivity)
                     // Log.e("[Flutter Adyen] SHOPPER LOCALE", "Shopper Locale from localeString $localeString: $shopperLocale")
+
+                    val shopperLocale = if (LocaleUtil.isValidLocale(locale)) locale else LocaleUtil.getLocale(nonNullActivity)
+
                     val cardConfiguration = CardConfiguration.Builder(nonNullActivity, clientKey!!)
                             .setHolderNameRequired(true)
                             .setShopperLocale(shopperLocale)
@@ -141,6 +149,7 @@ class FlutterAdyenPlugin :
 
                     val dropInConfiguration = DropInConfiguration.Builder(nonNullActivity, AdyenDropinService::class.java, clientKey)
                             .addCardConfiguration(cardConfiguration)
+                            .setShopperLocale(shopperLocale)
                             .setEnvironment(environment)
                             .build()
 
