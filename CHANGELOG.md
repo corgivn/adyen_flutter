@@ -1,3 +1,5 @@
+## 0.0.1+25
+* [Android] fixed issue DropIn not show stored card
 ## 0.0.1+24
 * [Android] hide store card field
 * [IOS] hide store card field
