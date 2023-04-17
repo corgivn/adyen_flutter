@@ -7,18 +7,22 @@ import android.util.Log
 import app.adyen.flutter_adyen.network.apis.getService
 import app.adyen.flutter_adyen.utils.combineToJSONObject
 import app.adyen.flutter_adyen.utils.createPaymentRequestV69
+import app.adyen.flutter_adyen.utils.createRemoveStoredPaymentMethodRequestV70
 import app.adyen.flutter_adyen.utils.getAmount
 import com.adyen.checkout.card.CardConfiguration
 import com.adyen.checkout.components.model.PaymentMethodsApiResponse
+import com.adyen.checkout.components.model.paymentmethods.StoredPaymentMethod
 import com.adyen.checkout.components.model.payments.request.PaymentComponentData
 import com.adyen.checkout.components.model.payments.response.Action
 import com.adyen.checkout.core.api.Environment
+import com.adyen.checkout.core.model.getStringOrNull
 import com.adyen.checkout.core.model.toStringPretty
 import com.adyen.checkout.core.util.LocaleUtil
 import com.adyen.checkout.dropin.DropIn
 import com.adyen.checkout.dropin.DropInConfiguration
 import com.adyen.checkout.dropin.service.DropInService
 import com.adyen.checkout.dropin.service.DropInServiceResult
+import com.adyen.checkout.dropin.service.RecurringDropInServiceResult
 import com.adyen.checkout.redirect.RedirectComponent
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -33,6 +37,11 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry
 import io.flutter.plugin.common.PluginRegistry.Registrar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.ResponseBody
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
@@ -131,7 +140,6 @@ class FlutterAdyenPlugin :
                 }
 
                 // Log.e("[Flutter Adyen] ENVIRONMENT", "Resolved environment: $environment")
-
                 try {
                     val jsonObject = JSONObject(paymentMethods ?: "")
                     val paymentMethodsApiResponse =
@@ -139,7 +147,7 @@ class FlutterAdyenPlugin :
                     val cardConfiguration = CardConfiguration.Builder(nonNullActivity, clientKey!!)
                         .setHolderNameRequired(true)
                         .setShopperLocale(LocaleUtil.getLocale(nonNullActivity))
-                        .setShowStorePaymentField(false)
+                        .setShowStorePaymentField(storePaymentMethod ?: false)
                         .setEnvironment(environment)
                         .build()
 
@@ -186,6 +194,7 @@ class FlutterAdyenPlugin :
                     res.error("PAYMENT_ERROR", "${e.printStackTrace()}", "")
                 }
             }
+
             else -> {
                 res.notImplemented()
             }
@@ -315,7 +324,6 @@ class AdyenDropinService : DropInService() {
         headers["content-type"] = "application/json"
         val re = paymentsRequest.combineToJSONObject()
         val call = getService(headers, baseUrl ?: "").payments(re)
-        call.request().headers()
         return try {
             val response = call.execute()
             val paymentsResponse = response.body()
@@ -388,6 +396,70 @@ class AdyenDropinService : DropInService() {
                 commit()
             }
             DropInServiceResult.Error(reason = "IOException")
+        }
+    }
+
+    override fun removeStoredPaymentMethod(
+        storedPaymentMethod: StoredPaymentMethod,
+        storedPaymentMethodJson: JSONObject
+    ) {
+        launch(Dispatchers.IO) {
+            val sharedPref = getSharedPreferences("ADYEN", Context.MODE_PRIVATE)
+            val merchantAccount = sharedPref.getString("merchantAccount", "UNDEFINED_STR")
+            val shopperReference = sharedPref.getString("shopperReference", null)
+            val apiKey: String = sharedPref.getString("apiKey", "") ?: ""
+            val accessToken: String = sharedPref.getString("accessToken", "") ?: ""
+            val baseUrl = sharedPref.getString("baseUrl", "UNDEFINED_STR")
+            val headers: HashMap<String, String> = HashMap()
+            headers["x-API-key"] = apiKey
+            headers["Authorization"] = "Bearer $accessToken"
+            headers["content-type"] = "application/json"
+
+            val requestBody = createRemoveStoredPaymentMethodRequestV70(
+                storedPaymentMethod.id.orEmpty(),
+                merchantAccount.orEmpty(),
+                shopperReference.orEmpty()
+            ).toString().toRequestBody("application/json".toMediaType())
+            val call =
+                getService(headers, baseUrl ?: "").removeStoredPaymentMethodAsync(requestBody)
+            try {
+                val response = call.execute()
+                val paymentsResponse = response.body()
+                val result =
+                    handleRemoveStoredPaymentMethodResult(
+                        paymentsResponse,
+                        storedPaymentMethod.id.orEmpty()
+                    )
+                sendRecurringResult(result)
+            } catch (e: IOException) {
+                with(sharedPref.edit()) {
+                    putString("AdyenResultCode", "ERROR")
+                    commit()
+                }
+                DropInServiceResult.Error(errorMessage = "IOException")
+            }
+        }
+    }
+
+    private fun handleRemoveStoredPaymentMethodResult(
+        response: ResponseBody?,
+        id: String
+    ): RecurringDropInServiceResult {
+        return if (response != null) {
+            val orderJson = response.string()
+            val jsonResponse = JSONObject(orderJson)
+            when (val responseCode = jsonResponse.getStringOrNull("response")) {
+                "[detail-successfully-disabled]" -> RecurringDropInServiceResult.PaymentMethodRemoved(
+                    id
+                )
+
+                else -> RecurringDropInServiceResult.Error(
+                    reason = responseCode,
+                    dismissDropIn = false
+                )
+            }
+        } else {
+            RecurringDropInServiceResult.Error(reason = "IOException")
         }
     }
 }

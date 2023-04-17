@@ -9,6 +9,8 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -23,6 +25,9 @@ interface CheckoutApi {
 
     @POST("payments/details")
     fun details(@Body detailsRequest: JSONObject): Call<JSONObject>
+
+    @POST("disable")
+    fun removeStoredPaymentMethodAsync(@Body request: RequestBody): Call<ResponseBody>
 }
 
 fun getService(headers: HashMap<String, String>, baseUrl: String): CheckoutApi {
