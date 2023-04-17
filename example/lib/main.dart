@@ -51,7 +51,7 @@ class _MyAppState extends State<MyApp> {
                   "challengeIndicator": "requestChallenge"
                 },
                 additionalData: {"allow3DS2": "true", "executeThreeD": "false"},
-                storePaymentMethod: false,
+                storePaymentMethod: true,
                 appleMerchantID: 'merchant.com.adyen.venchi',
               );
             } on PlatformException catch (e) {

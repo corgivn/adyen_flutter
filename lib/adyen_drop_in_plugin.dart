@@ -42,6 +42,7 @@ class AdyenDropInPlugin {
     args.putIfAbsent('reference', () => reference);
     args.putIfAbsent('threeDS2RequestData', () => threeDS2RequestData);
     args.putIfAbsent('appleMerchantID', () => appleMerchantID);
+    args.putIfAbsent('storePaymentMethod', () => storePaymentMethod);
 
     final String response = await _channel.invokeMethod('openDropIn', args);
     return response;

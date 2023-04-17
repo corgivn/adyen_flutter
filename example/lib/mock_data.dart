@@ -25,19 +25,19 @@ var examplePaymentMethods = {
 var examplePaymentMethods2 = {
   "paymentMethods": [
     {
-      "brands": ["visa", "mc", "amex", "cup", "jcb"],
-      "name": "Credit Card",
+      "brands": [
+        "visa",
+        "mc",
+        "amex",
+        "cup",
+        "jcb"
+      ],
+      "name": "信用卡",
       "type": "scheme"
     },
-    {"name": "AliPay HK", "type": "alipay_hk"},
     {
-      "brands": ["visa", "mc"],
-      "configuration": {
-        "merchantId": "merchant.com.adyen.venchi",
-        "merchantName": "Merchant Adyen Venchi"
-      },
-      "name": "Apple Pay",
-      "type": "applepay"
+      "name": "AliPay HK",
+      "type": "alipay_hk"
     },
     {
       "configuration": {
@@ -47,9 +47,36 @@ var examplePaymentMethods2 = {
       "name": "Google Pay",
       "type": "googlepay"
     },
-    {"name": "WeChat Pay", "type": "wechatpayMiniProgram"},
-    {"name": "WeChat Pay", "type": "wechatpayQR"},
-    {"name": "WeChat Pay", "type": "wechatpayWeb"}
+    {
+      "name": "WeChat Pay",
+      "type": "wechatpayMiniProgram"
+    },
+    {
+      "name": "WeChat Pay",
+      "type": "wechatpayQR"
+    }
+  ],
+  "storedPaymentMethods": [
+    {
+      "brand": "mc",
+      "expiryMonth": "03",
+      "expiryYear": "30",
+      "holderName": "Checkout Shopper PlaceHolder",
+      "id": "B2KS29XRP6KXWD82",
+      "lastFour": "0005",
+      "name": "万事达卡",
+      "networkTxReference": "YB52RTA4404170417",
+      "supportedRecurringProcessingModels": [
+        "CardOnFile",
+        "Subscription",
+        "UnscheduledCardOnFile"
+      ],
+      "supportedShopperInteractions": [
+        "Ecommerce",
+        "ContAuth"
+      ],
+      "type": "scheme"
+    }
   ]
 };
 String clientKey = '10001XXXXXXXXXXXXXXXXXXXX';

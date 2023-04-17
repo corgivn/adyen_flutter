@@ -4,7 +4,7 @@ version '1.0-SNAPSHOT'
 buildscript {
     ext.kotlin_version = '1.6.10'
     // Dependencies
-    ext.version_support_library = "1.4.1"
+    ext.version_support_library = "1.5.1"
     ext.version_lifecycle_extensions = "2.2.0"
     ext.version_adyen_cse = "1.0.5"
     ext.version_adyen3ds2 = "2.1.0-rc04"
@@ -46,7 +46,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -62,8 +62,12 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "com.adyen.checkout:drop-in:4.4.0"
-    implementation "com.google.code.gson:gson:2.8.6"
+    // android core
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
+
+    implementation "com.adyen.checkout:drop-in:4.10.0"
+
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version_kotlinx"
     implementation "androidx.appcompat:appcompat:$version_support_library"
     implementation "androidx.constraintlayout:constraintlayout:$version_constraint_layout"
@@ -71,6 +75,12 @@ dependencies {
     implementation "com.google.android.material:material:1.5.0"
     implementation "androidx.preference:preference-ktx:1.1.1"
     implementation "androidx.lifecycle:lifecycle-extensions:$version_lifecycle_extensions"
+
+    // android networking
+    implementation "com.google.code.gson:gson:2.8.6"
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation("com.squareup.okhttp3:logging-interceptor")
     implementation "com.squareup.retrofit2:retrofit:$version_retrofit2"
     implementation "com.squareup.retrofit2:converter-moshi:$version_retrofit2"
     implementation "com.squareup.retrofit2:converter-gson:$version_retrofit2"

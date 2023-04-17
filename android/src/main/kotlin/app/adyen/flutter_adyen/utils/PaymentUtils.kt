@@ -63,6 +63,18 @@ fun createPaymentRequestV69(
     return PaymentsRequestV69(paymentComponentData, paymentsRequestData)
 }
 
+fun createRemoveStoredPaymentMethodRequestV70(
+    recurringDetailReference: String,
+    merchantAccount: String,
+    shopperReference: String
+): JSONObject {
+    return JSONObject().apply {
+        put("recurringDetailReference", recurringDetailReference)
+        put("merchantAccount", merchantAccount)
+        put("shopperReference", shopperReference)
+    }
+}
+
 fun getAmount(amount: String, currency: String) = createAmount(amount.toInt(), currency)
 
 fun createAmount(value: Int, currency: String): Amount {
