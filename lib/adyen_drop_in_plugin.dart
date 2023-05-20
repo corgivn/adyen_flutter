@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
+import 'adyen_drop_in_plugin_platform_interface.dart';
+
 class AdyenDropInPlugin {
-  static const MethodChannel _channel = const MethodChannel('flutter_adyen');
+  static const MethodChannel _channel = MethodChannel('flutter_adyen');
 
   static Future<String> openDropIn(
       {paymentMethods,
@@ -46,5 +48,9 @@ class AdyenDropInPlugin {
 
     final String response = await _channel.invokeMethod('openDropIn', args);
     return response;
+  }
+
+  Future<String?> getPlatformVersion() {
+    return AdyenDropInPluginPlatform.instance.getPlatformVersion();
   }
 }
