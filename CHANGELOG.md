@@ -1,3 +1,5 @@
+## 0.0.2+26
+* [Android] Update latest build gradle
 ## 0.0.1+25
 * [Android] fixed issue DropIn not show stored card
 ## 0.0.1+24
