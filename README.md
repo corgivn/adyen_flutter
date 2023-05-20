@@ -8,15 +8,18 @@ This library enables you to open the **Drop-in** method of Adyen with just calli
 * [Adyen drop-in Android](https://docs.adyen.com/checkout/android/drop-in)
 * [Adyen drop-in iOS](https://docs.adyen.com/checkout/ios/drop-in)
 
-The Plugin supports 3dSecure v2 and one time payment. It was not tested in a recurring payment scenario.
+The Plugin supports 3dSecure v2 and one time payment. It was not tested in a recurring payment
+scenario.
 
 ## Prerequisites
 
 ### Credentials
+
 #### You need to have the following information:
+
 * publicKey (from Adyen)
 * clientKey (from Adyen)
-* amount & currency 
+* amount & currency
 * shopperReference (e.g userId)
 * baseUrl from your backend
 * Adyen Environment (Test, LIVE_EU etc..)
@@ -25,8 +28,10 @@ The Plugin supports 3dSecure v2 and one time payment. It was not tested in a rec
 
 ### Payment Methods
 
-Before calling the plugin, make sure to get the **payment methods** from your backend. For this, call the [a /paymentMethods](https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v46/paymentMethods) endpoint:
-
+Before calling the plugin, make sure to get the **payment methods** from your backend. For this,
+call
+the [a /paymentMethods](https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v46/paymentMethods)
+endpoint:
 
 An example response from payment methods can be seen here:
 
@@ -84,16 +89,15 @@ An example response from payment methods can be seen here:
 }
 ```
 
-
-
-
-
 The app uses these endpoints for payment submit and payment details calls:
+
 ```
 <your base url>/payment
 <your base url>/payment/details
 ```
+
 The plugin will send data for the payment submit call wrapped into another object like this:
+
 ```
 {
   payment: <all data for payment which has to be sent to adyen>,
@@ -105,12 +109,12 @@ The plugin will send data for the payment submit call wrapped into another objec
 
 ```
 
-
 ## Setup
 
 ### Android
 
-And in the AndroidManifest.xml in your application tag add this service, this allows adyen to tell the android app the result of the payment.
+And in the AndroidManifest.xml in your application tag add this service, this allows adyen to tell
+the android app the result of the payment.
 
 ```
 <application ...>
@@ -123,6 +127,7 @@ And in the AndroidManifest.xml in your application tag add this service, this al
 ``` 
 
 #### Proguard
+
 you need to add this to your proguard rules
 
 ```  
@@ -131,12 +136,13 @@ you need to add this to your proguard rules
 ```
 
 ### iOS
+
 You need to add a URL_SCHEME if you do not have one yet.
 
 [Here is how to add one.](https://developer.apple.com/documentation/uikit/inter-process_communication/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app)
 
-
 ## Flutter Implementation
+
 To start a Payment you need to call the plugin like so:
 
 ```
