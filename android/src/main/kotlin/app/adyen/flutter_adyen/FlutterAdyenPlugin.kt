@@ -133,13 +133,14 @@ class FlutterAdyenPlugin :
                  */
 
                 val environment = when (env) {
-                    "LIVE_US" -> Environment.UNITED_STATES
-                    "LIVE_AUSTRALIA" -> Environment.AUSTRALIA
-                    "LIVE_EUROPE" -> Environment.EUROPE
+                    "UNITED_STATES" -> Environment.UNITED_STATES
+                    "AUSTRALIA" -> Environment.AUSTRALIA
+                    "EUROPE" -> Environment.EUROPE
                     else -> Environment.TEST
                 }
 
-                // Log.e("[Flutter Adyen] ENVIRONMENT", "Resolved environment: $environment")
+//                Log.e("[Flutter Adyen] ENV", "From Flutter: $env")
+//                Log.e("[Flutter Adyen] ENV", "Resolved environment: ${environment.baseUrl}")
                 try {
                     val jsonObject = JSONObject(paymentMethods ?: "")
                     val paymentMethodsApiResponse =
