@@ -87,11 +87,11 @@ public class SwiftFlutterAdyenPlugin: NSObject, FlutterPlugin {
         }
 
         var ctx = Environment.test
-        if(environment == "LIVE_US") {
+        if(environment == "liveUnitedStates") {
             ctx = Environment.liveUnitedStates
-        } else if (environment == "LIVE_AUSTRALIA"){
+        } else if (environment == "liveAustralia"){
             ctx = Environment.liveAustralia
-        } else if (environment == "LIVE_EUROPE"){
+        } else if (environment == "liveEurope"){
             ctx = Environment.liveEurope
         }
 

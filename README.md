@@ -158,7 +158,7 @@ To start a Payment you need to call the plugin like so:
           },
           shopperReference: <YouShopperReference>,
           returnUrl: 'yourAppScheme://payment', //required for iOS
-          environment: 'TEST',  // add you environment for produciton here: LIVE_US, LIVE_AUSTRALIA or LIVE_EUROPE
+          environment: 'TEST',  // add you environment for produciton here: liveUnitedStates, liveAustralia or liveEurope
           locale: 'de_DE', // your preferred locale
           publicKey: <your adyen public key>,
           currency: 'EUR');  // your preferred currency
