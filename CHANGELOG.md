@@ -1,3 +1,5 @@
+## 0.0.5+29
+* [IOS] fix: wrong env mapping
 ## 0.0.4+28
 * [Android] fix: wrong env mapping
 ## 0.0.3+27
