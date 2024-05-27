@@ -1,3 +1,5 @@
+## 0.0.4+28
+* [Android] fix: wrong env mapping
 ## 0.0.3+27
 * [Android] fix issue can't export aab release
 ## 0.0.2+26
