@@ -276,8 +276,10 @@ extension SwiftFlutterAdyenPlugin: DropInComponentDelegate {
                     result(response.resultCode.rawValue)
                     self.topController?.dismiss(animated: true, completion: nil)
 
-                } else if (response.resultCode == .error || response.resultCode == .refused) {
-                    self.didFail(with: PaymentError(error: "finish - fail"), from: component)
+                } else if (response.resultCode == .error) {
+                    self.didFail(with: PaymentError(error: "finish - error"), from: component)
+                } else if (response.resultCode == .refused) {
+                    self.didFail(with: PaymentError(error: "finish - refused"), from: component)
                 }
                 else {
                     self.didFail(with: PaymentCancelled(), from: component)
