@@ -1,3 +1,6 @@
+## 0.0.7
+* [Android] 
+ chore: Upgrade build gradle
 ## 0.0.6
 * [IOS] fix: wrong env mapping
 ## 0.0.5+29
