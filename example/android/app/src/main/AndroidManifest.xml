@@ -38,15 +38,6 @@
                 />
         </activity>
 
-        <activity
-            android:name=".EmbeddingV1Activity"
-            android:theme="@style/LaunchTheme"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-            android:hardwareAccelerated="true"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize">
-        </activity>
-
         <service
             android:name="app.adyen.flutter_adyen.AdyenDropinService"
             android:permission="android.permission.BIND_JOB_SERVICE"

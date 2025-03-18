@@ -36,7 +36,6 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry
-import io.flutter.plugin.common.PluginRegistry.Registrar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
@@ -58,20 +57,7 @@ class FlutterAdyenPlugin :
     var flutterResult: Result? = null
 
     companion object {
-
         const val CHANNEL_NAME = "flutter_adyen"
-
-        /**
-         * For EmbeddingV1
-         */
-        @JvmStatic
-        fun registerWith(registrar: Registrar) {
-            FlutterAdyenPlugin().apply {
-                onAttachedToEngine(registrar.messenger())
-                activity = registrar.activity()
-                addActivityResultListener(registrar)
-            }
-        }
     }
 
     override fun onMethodCall(call: MethodCall, res: Result) {
@@ -257,10 +243,6 @@ class FlutterAdyenPlugin :
 
     private fun addActivityResultListener(activityBinding: ActivityPluginBinding) {
         activityBinding.addActivityResultListener(this)
-    }
-
-    private fun addActivityResultListener(registrar: PluginRegistry.Registrar) {
-        registrar.addActivityResultListener(this)
     }
     //endregion
 }
